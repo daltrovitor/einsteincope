@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Calendar, BookOpen, Clock, ArrowRight } from 'lucide-react'
+import { Calendar, BookOpen, Clock, ArrowRight, GraduationCap } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
 
 export default async function StudentDashboard() {
@@ -23,7 +23,7 @@ export default async function StudentDashboard() {
                 <p className="text-slate-500 text-sm md:text-base">Aqui está o resumo das suas atividades escolares.</p>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-3">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 <Link href="/dashboard/student/calendar" className="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 transition-all hover:shadow-md hover:ring-primary-200">
                     <div className="flex items-center justify-between mb-4">
                         <div className="rounded-lg bg-blue-50 p-2 text-primary-600 group-hover:bg-primary-50">
@@ -60,6 +60,19 @@ export default async function StudentDashboard() {
                     <p className="mt-2 text-sm text-slate-500">Consulte sua grade de aulas semanal.</p>
                     <div className="mt-4 flex items-center text-sm font-medium text-primary-600 group-hover:text-primary-700">
                         Ver horários <ArrowRight className="ml-1 h-4 w-4" />
+                    </div>
+                </Link>
+
+                <Link href="/dashboard/student/evaluation" className="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 transition-all hover:shadow-md hover:ring-primary-200">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="rounded-lg bg-blue-50 p-2 text-primary-600 group-hover:bg-primary-50">
+                            <GraduationCap className="h-6 w-6" />
+                        </div>
+                    </div>
+                    <h3 className="text-lg font-semibold text-slate-900">Avaliações</h3>
+                    <p className="mt-2 text-sm text-slate-500">Entenda a composição das suas notas.</p>
+                    <div className="mt-4 flex items-center text-sm font-medium text-primary-600 group-hover:text-primary-700">
+                        Ver detalhes <ArrowRight className="ml-1 h-4 w-4" />
                     </div>
                 </Link>
             </div>

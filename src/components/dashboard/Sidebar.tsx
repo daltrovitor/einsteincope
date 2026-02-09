@@ -2,13 +2,14 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Calendar, BookOpen, Clock, FileText, Upload, PlusCircle, LogOut } from 'lucide-react'
+import { Home, Calendar, BookOpen, Clock, FileText, Upload, PlusCircle, LogOut, GraduationCap } from 'lucide-react'
 import { Role } from '@/types'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
 
 const studentLinks = [
     { name: 'Visão Geral', href: '/dashboard/student', icon: Home },
+    { name: 'Avaliações', href: '/dashboard/student/evaluation', icon: GraduationCap },
     { name: 'Calendário', href: '/dashboard/student/calendar', icon: Calendar },
     { name: 'Provas', href: '/dashboard/student/exams', icon: BookOpen },
     { name: 'Horário', href: '/dashboard/student/schedule', icon: Clock },
@@ -36,7 +37,7 @@ export function Sidebar({ role, name, onLinkClick }: { role: Role, name?: string
     }
 
     return (
-        <div className="flex flex-col h-full bg-white border-r border-slate-200 w-full lg:w-64 shadow-sm">
+        <div className="flex flex-col h-full bg-white border-r border-slate-200 w-full lg:w-64 shadow-sm animate-in slide-in-from-left duration-500">
             <div className=" border-b border-slate-100 flex items-center gap-3">
                 <img src="/einstein.png" alt="Logo" className="h-20 w-20 shrink-0" />
                 <div className="flex flex-col">
