@@ -45,7 +45,7 @@ export default function EvaluationSystem() {
                         <div className="space-y-3">
                             <div className="flex justify-between items-center bg-slate-50 p-4 rounded-xl border border-slate-100">
                                 <span className="font-semibold text-slate-700">Prova Objetiva (PO)</span>
-                                <span className="font-bold text-slate-900 bg-white px-2 py-1 rounded shadow-sm border text-sm">1,5</span>
+                                <span className="font-bold text-slate-900 bg-white px-2 py-1 rounded shadow-sm border text-sm">1.5</span>
                             </div>
                              <div className="flex justify-between items-center bg-slate-50 p-4 rounded-xl border border-slate-100">
                                 <span className="font-semibold text-slate-700">Simulado (S)</span>
@@ -257,14 +257,14 @@ export default function EvaluationSystem() {
                                     <span className="block text-xs font-semibold text-slate-500 mb-2 uppercase">Questão 1</span>
                                     <div className="space-y-1">
                                         <div className="flex justify-between text-xs"><span className="text-slate-500">a)</span> <span className="font-mono font-medium">1,5</span></div>
-                                        <div className="flex justify-between text-xs"><span className="text-slate-500">b)</span> <span className="font-mono font-medium">1,5</span></div>
+                                        <div className="flex justify-between text-xs"><span className="text-slate-500">b)</span> <span className="font-mono font-medium">2,0</span></div>
                                     </div>
                                 </div>
                                 <div className="bg-slate-50 p-3 rounded-lg border border-slate-100">
                                     <span className="block text-xs font-semibold text-slate-500 mb-2 uppercase">Questão 2</span>
                                     <div className="space-y-1">
                                         <div className="flex justify-between text-xs"><span className="text-slate-500">a)</span> <span className="font-mono font-medium">1,5</span></div>
-                                        <div className="flex justify-between text-xs"><span className="text-slate-500">b)</span> <span className="font-mono font-medium">1,5</span></div>
+                                        <div className="flex justify-between text-xs"><span className="text-slate-500">b)</span> <span className="font-mono font-medium">2,0</span></div>
                                     </div>
                                 </div>
                             </div>
