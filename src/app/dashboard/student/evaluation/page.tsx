@@ -45,7 +45,7 @@ export default function EvaluationSystem() {
                         <div className="space-y-3">
                             <div className="flex justify-between items-center bg-slate-50 p-4 rounded-xl border border-slate-100">
                                 <span className="font-semibold text-slate-700">Prova Objetiva (PO)</span>
-                                <span className="font-bold text-slate-900 bg-white px-2 py-1 rounded shadow-sm border text-sm">1.5</span>
+                                <span className="font-bold text-slate-900 bg-white px-2 py-1 rounded shadow-sm border text-sm">10</span>
                             </div>
                              <div className="flex justify-between items-center bg-slate-50 p-4 rounded-xl border border-slate-100">
                                 <span className="font-semibold text-slate-700">Simulado (S)</span>
