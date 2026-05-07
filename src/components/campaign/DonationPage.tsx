@@ -115,7 +115,7 @@ export default function DonationPage({ onClose }: { onClose?: () => void }) {
                     setSelectedAmount(amount);
                     setCustomAmount('');
                   }}
-                  className={`py-4 px-4 rounded-xl font-bold text-lg transition-all duration-300 ${
+                  className={`py-4 px-2 md:px-4 rounded-xl font-bold text-base md:text-lg whitespace-nowrap transition-all duration-300 ${
                     selectedAmount === amount
                       ? 'bg-blue-600 text-white shadow-lg scale-105'
                       : 'bg-white/5 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-gray-800 active:scale-95'
