@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 import { useState } from 'react'
 import Logo from './Logo'
@@ -47,14 +48,17 @@ export default function Navbar() {
         </div>
       </div>
 
-      <motion.button
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1, delay: 1 }}
-        whileTap={{ scale: 0.95 }}
-        className="shadow-premium cursor-pointer rounded-full bg-black px-8 py-3.5 text-[10px] font-bold tracking-[0.2em] text-white uppercase transition-all duration-500 hover:scale-105 hover:shadow-2xl active:scale-95">
-        Contribuir
-      </motion.button>
+      <Link href="/donate">
+        <motion.button
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, delay: 1 }}
+          whileTap={{ scale: 0.95 }}
+          className="shadow-premium cursor-pointer rounded-full bg-black px-8 py-3.5 text-[10px] font-bold tracking-[0.2em] text-white uppercase transition-all duration-500 hover:scale-105 hover:shadow-2xl active:scale-95"
+        >
+          Contribuir
+        </motion.button>
+      </Link>
     </motion.nav>
   )
 }

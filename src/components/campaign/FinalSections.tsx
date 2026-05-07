@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { MousePointer2, Heart, Share2 } from 'lucide-react';
 
@@ -88,10 +89,12 @@ export function CTASection() {
           <h2 className="text-6xl md:text-9xl font-display leading-[0.85] tracking-tighter mb-16">
             AJUDE O EINSTÃO <br/> <span className="italic text-primary">FAÇA A DIFERENÇA.</span>
           </h2>
-          <button className="group relative px-16 py-7 bg-black text-white rounded-full overflow-hidden transition-all hover:scale-110 active:scale-95 shadow-2xl">
-            <span className="relative z-10 font-bold uppercase tracking-widest text-sm">Contribuir Agora</span>
-            <div className="absolute inset-0 bg-primary translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-          </button>
+          <Link href="/donate">
+            <button className="group relative px-16 py-7 bg-black text-white rounded-full overflow-hidden transition-all hover:scale-110 active:scale-95 shadow-2xl">
+              <span className="relative z-10 font-bold uppercase tracking-widest text-sm">Contribuir Agora</span>
+              <div className="absolute inset-0 bg-primary translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
+            </button>
+          </Link>
         </motion.div>
       </div>
       

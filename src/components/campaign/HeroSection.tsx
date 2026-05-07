@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, memo } from 'react';
 import { Heart, Apple as Fruit, Users, Star } from 'lucide-react';
@@ -66,16 +67,18 @@ const HeroSection = () => {
             transition={{ duration: 0.8, delay: 1, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col sm:flex-row items-center lg:justify-start justify-center gap-6"
           >
-            <button className="group relative px-12 py-5 cursor-pointer bg-black text-white rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-2xl">
-              <span className="relative z-10 font-bold uppercase tracking-widest text-xs">Contribuir</span>
-              <div className="absolute inset-0 bg-primary translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-            </button>
+            <Link href="/donate">
+              <button className="group relative px-12 py-5 cursor-pointer bg-black text-white rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-2xl">
+                <span className="relative z-10 font-bold uppercase tracking-widest text-xs">Contribuir</span>
+                <div className="absolute inset-0 bg-primary translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
+              </button>
+            </Link>
           </motion.div>
         </motion.div>
 
         <motion.div 
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
           className="relative order-2 lg:order-2"
         >

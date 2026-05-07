@@ -25,6 +25,8 @@
     "framer-motion": "^12.38.0",
     "lucide-react": "^0.563.0",
     "next": "^16.1.0",
+    "pix-utils": "^2.8.2",
+    "qrcode.react": "^4.2.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "sharp": "^0.34.5",
