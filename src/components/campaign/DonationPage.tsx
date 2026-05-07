@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { generatePixPayload } from '@/utils/pix';
 import { Copy, Check, X } from 'lucide-react';
 import QRCodeDisplay from './QRCodeDisplay';
+import { InfiniteGrid } from '../ui/the-infinite-grid';
 
 const PIX_KEY = '7c653110-0380-458c-ba23-fd3e291e6104';
 const DONATION_AMOUNTS = [5, 10, 20, 50, 100];
@@ -56,20 +57,9 @@ export default function DonationPage({ onClose }: { onClose?: () => void }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-hidden">
-      {/* Infinite Grid Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white via-blue-50/30 to-white">
-        <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse" patternTransform="translate(0,0)">
-              <path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(59, 130, 246, 0.1)" strokeWidth="0.5"/>
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-        </svg>
-        
-        {/* Animated gradient orbs */}
-        <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-gradient-to-br from-blue-100/20 to-cyan-100/10 rounded-full blur-[100px] animate-pulse" />
-        <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-gradient-to-br from-purple-100/15 to-pink-100/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
+      {/* Interactive Infinite Grid Background */}
+      <div className="absolute inset-0 z-0">
+        <InfiniteGrid className="h-full" />
       </div>
 
       {/* Content */}
@@ -77,9 +67,14 @@ export default function DonationPage({ onClose }: { onClose?: () => void }) {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
-        className="relative z-10 bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        className="relative z-10 bg-white/10 backdrop-blur-[40px] rounded-[3rem] shadow-[0_20px_80px_rgba(0,0,0,0.15)] border border-white/30 max-w-[95%] md:max-w-xl w-full max-h-[90vh] overflow-y-auto overflow-x-hidden"
       >
-        <div className="p-8 md:p-12">
+        {/* Logo Colors in Corners of the Card */}
+        <div className="absolute top-0 left-0 w-32 h-32 bg-blue-500/20 blur-[60px] pointer-events-none" />
+        <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 blur-[60px] pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-yellow-400/10 blur-[60px] pointer-events-none" />
+        
+        <div className="p-6 md:p-12 relative z-10">
           {/* Close Button */}
           {onClose && (
             <button
@@ -95,13 +90,13 @@ export default function DonationPage({ onClose }: { onClose?: () => void }) {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-center mb-12"
+            className="text-center mb-8 md:mb-12"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-black mb-4">
+            <h1 className="text-3xl md:text-5xl font-bold text-black mb-2 md:mb-4">
               Contribua com EINSTÃO
             </h1>
-            <p className="text-lg text-gray-600">
-              Escolha quanto você deseja doar
+            <p className="text-base md:text-lg text-gray-600">
+              Escolha quanto deseja doar
             </p>
           </motion.div>
 
@@ -122,8 +117,8 @@ export default function DonationPage({ onClose }: { onClose?: () => void }) {
                   }}
                   className={`py-4 px-4 rounded-xl font-bold text-lg transition-all duration-300 ${
                     selectedAmount === amount
-                      ? 'bg-gradient-to-br from-blue-600 to-cyan-600 text-white shadow-lg scale-105'
-                      : 'bg-gray-100 text-gray-800 hover:bg-gray-200 active:scale-95'
+                      ? 'bg-blue-600 text-white shadow-lg scale-105'
+                      : 'bg-white/5 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-gray-800 active:scale-95'
                   }`}
                 >
                   R$ {amount}
@@ -163,7 +158,7 @@ export default function DonationPage({ onClose }: { onClose?: () => void }) {
               className="space-y-8"
             >
               {/* QR Code Section */}
-              <div className="flex flex-col items-center p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl">
+              <div className="flex flex-col items-center p-6 bg-white/20 backdrop-blur-md rounded-3xl border border-white/40 shadow-sm">
                 <p className="text-sm font-semibold text-gray-600 mb-4 uppercase tracking-wider">
                   Escaneie com seu celular
                 </p>
