@@ -21,14 +21,7 @@ const Model = memo(({ url }: { url: string }) => {
   const group = useRef<THREE.Group>(null)
   const gl = useThree((state) => state.gl)
 
-  const { scene, animations } = useGLTF(url, DRACO_URL, (loader) => {
-    const ktx2Loader = new KTX2Loader()
-    ktx2Loader.setTranscoderPath(
-      'https://www.gstatic.com/basis-universal/versioned/decoders/2.0.2/'
-    )
-    ktx2Loader.detectSupport(gl)
-    loader.setKTX2Loader(ktx2Loader)
-  })
+  const { scene, animations } = useGLTF(url, DRACO_URL)
 
   const { actions } = useAnimations(animations, group)
 
