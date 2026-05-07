@@ -131,8 +131,8 @@ export default function DonationPage({ onClose }: { onClose?: () => void }) {
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Ou insira um valor personalizado:
               </label>
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-bold text-gray-600">R$</span>
+              <div className="flex items-center gap-3 bg-white/5 backdrop-blur-sm border border-white/20 rounded-2xl px-4 py-3 focus-within:border-blue-500/50 focus-within:ring-2 focus-within:ring-blue-100/20 transition-all">
+                <span className="text-lg font-bold text-gray-400">R$</span>
                 <input
                   type="number"
                   value={customAmount}
@@ -143,7 +143,7 @@ export default function DonationPage({ onClose }: { onClose?: () => void }) {
                   placeholder="0.00"
                   min="0.01"
                   step="0.01"
-                  className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all"
+                  className="flex-1 bg-transparent border-none outline-none text-lg font-bold text-gray-800 placeholder:text-gray-400"
                 />
               </div>
             </div>
