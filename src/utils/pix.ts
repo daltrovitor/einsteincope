@@ -1,4 +1,4 @@
-import { createStaticPix } from 'pix-utils';
+import { createStaticPix, hasError } from 'pix-utils';
 
 /**
  * Generates a PIX Copy and Paste / QR Code payload.
@@ -25,6 +25,10 @@ export function generatePixPayload(
       infoAdicional: 'Pagamento via Web',
       txid: '***', // Standard for static PIX
     });
+
+    if (hasError(pix)) {
+      throw new Error('PIX creation error');
+    }
 
     return pix.toBRCode();
   } catch (error) {
