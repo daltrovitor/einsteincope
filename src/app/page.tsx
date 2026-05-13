@@ -4,7 +4,6 @@ import HeroSection from '@/components/campaign/HeroSection';
 import AboutSection from '@/components/campaign/AboutSection';
 import ImpactSection from '@/components/campaign/ImpactSection';
 import { HowToHelpSection, GallerySection, CTASection, Footer } from '@/components/campaign/FinalSections';
-import RaffleSection from '@/components/campaign/RaffleSection';
 
 export default function LandingPage() {
   return (
@@ -15,7 +14,6 @@ export default function LandingPage() {
       <HeroSection />
       <AboutSection />
       <ImpactSection />
-      <RaffleSection />
       <HowToHelpSection />
       <GallerySection />
       <CTASection />

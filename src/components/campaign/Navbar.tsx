@@ -37,7 +37,7 @@ export default function Navbar() {
         <Logo className="h-auto w-16" />
 
         <div className="hidden items-center gap-8 lg:flex">
-          {['Sobre', 'Impacto', 'Rifas', 'Como Ajudar', 'Galeria'].map((item) => (
+          {['Sobre', 'Impacto', 'Como Ajudar', 'Galeria'].map((item) => (
             <a
               key={item}
               href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
