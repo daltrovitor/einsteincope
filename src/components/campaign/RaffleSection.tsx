@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Link from 'next/link';
+import { getSubdomainUrl } from '@/lib/utils';
 
 export default function RaffleSection() {
   return (
@@ -57,11 +57,11 @@ export default function RaffleSection() {
               </ul>
             </div>
             
-            <Link href="/rifas/secador">
+            <a href={getSubdomainUrl('rifas', '/secador')}>
               <button className="w-full bg-[#4A2B1D] text-white py-4 rounded-2xl font-bold text-xl hover:bg-[#3A2217] transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg">
                 Comprar Rifa (R$ 10,00)
               </button>
-            </Link>
+            </a>
           </motion.div>
 
           {/* Rifa 2 - Clareamento */}
@@ -93,11 +93,11 @@ export default function RaffleSection() {
               </ul>
             </div>
             
-            <Link href="/rifas/clareamento">
+            <a href={getSubdomainUrl('rifas', '/clareamento')}>
               <button className="w-full bg-[#4A2B1D] text-white py-4 rounded-2xl font-bold text-xl hover:bg-[#3A2217] transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg">
                 Comprar Rifa (R$ 10,00)
               </button>
-            </Link>
+            </a>
           </motion.div>
         </div>
 

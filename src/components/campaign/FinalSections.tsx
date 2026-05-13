@@ -95,6 +95,8 @@ export function GallerySection() {
   )
 }
 
+import { getSubdomainUrl } from '@/lib/utils'
+
 export function CTASection() {
   return (
     <section className="relative overflow-hidden bg-white px-6 py-48 text-center md:py-64">
@@ -107,16 +109,17 @@ export function CTASection() {
             AJUDE O EINSTÃO <br />{' '}
             <span className="text-primary italic">FAÇA A DIFERENÇA.</span>
           </h2>
-          <Link href="/donate">
+          <a href={getSubdomainUrl('rifas')}>
             <button className="group relative overflow-hidden rounded-full bg-black px-16 py-7 text-white shadow-2xl transition-all hover:scale-110 active:scale-95">
               <span className="relative z-10 cursor-pointer text-sm font-bold tracking-widest uppercase">
-                Contribuir Agora
+                Ver Rifas Ativas
               </span>
               <div className="bg-primary absolute inset-0 translate-y-full transition-transform duration-500 group-hover:translate-y-0" />
             </button>
-          </Link>
+          </a>
         </motion.div>
       </div>
+
 
       {/* Background Shapes */}
       <div className="bg-accent-red/5 absolute top-1/2 left-0 h-64 w-64 rounded-full blur-[100px]" />

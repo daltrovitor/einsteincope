@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 import { useState } from 'react'
 import Logo from './Logo'
+import { getSubdomainUrl } from '@/lib/utils'
 
 export default function Navbar() {
   const { scrollY } = useScroll()
@@ -40,11 +41,16 @@ export default function Navbar() {
           {['Sobre', 'Impacto', 'Como Ajudar', 'Galeria'].map((item) => (
             <a
               key={item}
-              href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
+              href={`/#${item.toLowerCase().replace(/\s+/g, '-')}`}
               className="hover:text-primary text-[10px] font-bold tracking-[0.4em] text-black/70 uppercase transition-colors duration-500">
               {item}
             </a>
           ))}
+          <a
+            href={getSubdomainUrl('rifas')}
+            className="bg-primary text-white px-4 py-1.5 rounded-full text-[9px] font-black tracking-[0.2em] uppercase transition-all duration-500 hover:scale-105 active:scale-95 shadow-lg">
+            Rifas
+          </a>
         </div>
       </div>
 

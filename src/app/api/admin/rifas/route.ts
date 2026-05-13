@@ -1,22 +1,20 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
-
-const DB_FILE = path.join(process.cwd(), 'data.json');
-
-async function getDB() {
-  try {
-    const data = await fs.readFile(DB_FILE, 'utf-8');
-    return JSON.parse(data);
-  } catch (error) {
-    return { buyers: [] };
-  }
-}
+import { supabase } from '@/lib/supabase';
 
 export async function GET() {
   try {
-    const db = await getDB();
-    return NextResponse.json(db.buyers);
+    const { data: buyers, error } = await supabase
+      .from('raffle_buyers')
+      .select('*, raffles(title, slug)')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    // Transform to match old expected format if necessary, 
+    // but the new admin uses Supabase directly.
+    return NextResponse.json(buyers);
   } catch (error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }

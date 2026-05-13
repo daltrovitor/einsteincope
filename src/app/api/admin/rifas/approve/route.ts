@@ -1,41 +1,24 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
-
-const DB_FILE = path.join(process.cwd(), 'data.json');
-
-async function getDB() {
-  try {
-    const data = await fs.readFile(DB_FILE, 'utf-8');
-    return JSON.parse(data);
-  } catch (error) {
-    return { buyers: [] };
-  }
-}
-
-async function saveDB(data: any) {
-  await fs.writeFile(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
-}
+import { supabase } from '@/lib/supabase';
 
 export async function POST(request: Request) {
   try {
     const { id } = await request.json();
-    
+
     if (!id) {
-      return NextResponse.json({ error: 'Missing ID' }, { status: 400 });
+      return NextResponse.json({ error: 'ID is required' }, { status: 400 });
     }
 
-    const db = await getDB();
-    const buyerIndex = db.buyers.findIndex((b: any) => b.id === id);
+    const { error } = await supabase
+      .from('raffle_buyers')
+      .update({ status: 'APPROVED', updated_at: new Date().toISOString() })
+      .eq('id', id);
 
-    if (buyerIndex === -1) {
-      return NextResponse.json({ error: 'Buyer not found' }, { status: 404 });
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    db.buyers[buyerIndex].status = 'APPROVED';
-    await saveDB(db);
-
-    return NextResponse.json({ success: true, buyer: db.buyers[buyerIndex] });
+    return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
