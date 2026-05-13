@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 import { useState } from 'react'
 import Logo from './Logo'
-import { getSubdomainUrl } from '@/lib/utils'
 
 export default function Navbar() {
   const { scrollY } = useScroll()
@@ -46,11 +45,6 @@ export default function Navbar() {
               {item}
             </a>
           ))}
-          <a
-            href={getSubdomainUrl('rifas')}
-            className="bg-primary text-white px-4 py-1.5 rounded-full text-[9px] font-black tracking-[0.2em] uppercase transition-all duration-500 hover:scale-105 active:scale-95 shadow-lg">
-            Rifas
-          </a>
         </div>
       </div>
 
