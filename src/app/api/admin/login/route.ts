@@ -7,7 +7,8 @@ export async function POST(request: Request) {
 
     // Senha simples para o admin
     if (password === 'einstein123') {
-      cookies().set('admin_session', 'authenticated', {
+      const cookieStore = await cookies();
+      cookieStore.set('admin_session', 'authenticated', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
