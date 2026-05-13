@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LayoutDashboard, Ticket, Users, LogOut, Menu, X } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -11,8 +12,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
 
   useEffect(() => {
-    const auth = sessionStorage.getItem('admin_auth');
-    setIsAuthenticated(auth === 'true');
+    // Check initial session
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsAuthenticated(!!session);
+    };
+
+    checkSession();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   if (isAuthenticated === null) {
@@ -43,8 +58,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: 'Compradores', href: '/compradores', icon: Users },
   ];
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('admin_auth');
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     window.location.href = '/login';
   };
 

@@ -1,24 +1,37 @@
 'use client';
 
 import { useState } from 'react';
-import { Lock, ArrowRight } from 'lucide-react';
+import { Lock, Mail, ArrowRight } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 export default function AdminLoginPage() {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
     
-    // In a real production app, this would be a server action or API call
-    // For this demonstration, we use the user's previously defined password
-    if (password === 'admin123') {
-      sessionStorage.setItem('admin_auth', 'true');
-      window.location.href = '/';
-    } else {
-      setError(true);
+    try {
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (authError) {
+        setError(authError.message === 'Invalid login credentials' 
+          ? 'Email ou senha incorretos.' 
+          : authError.message);
+      } else {
+        // Redireciona para o dashboard
+        window.location.href = '/';
+      }
+    } catch (err: any) {
+      setError('Ocorreu um erro ao tentar fazer login.');
+    } finally {
       setLoading(false);
     }
   };
@@ -38,42 +51,58 @@ export default function AdminLoginPage() {
           </div>
 
           <h1 className="text-3xl font-black text-center text-[#4A2B1D] mb-2 tracking-tight">Painel Administrativo</h1>
-          <p className="text-center text-[#8E5A3C] mb-10 font-medium">Insira sua senha para continuar.</p>
+          <p className="text-center text-[#8E5A3C] mb-10 font-medium">Faça login para acessar o sistema.</p>
           
           <form onSubmit={handleLogin} className="space-y-6">
-            <div>
-              <label className="block text-xs font-black text-[#4A2B1D] uppercase tracking-widest mb-3 ml-1">Senha de Acesso</label>
-              <input 
-                type="password" 
-                value={password}
-                onChange={(e) => {
-                    setPassword(e.target.value);
-                    setError(false);
-                }}
-                autoFocus
-                className={`w-full px-5 py-4 rounded-2xl border-2 transition-all outline-none text-lg ${error ? 'border-red-400 bg-red-50' : 'border-gray-100 bg-gray-50 focus:border-[#8E5A3C] focus:bg-white'}`}
-                placeholder="••••••••"
-              />
-              {error && (
-                <div className="flex items-center gap-2 mt-3 text-red-500 text-sm font-bold animate-shake">
-                    <span>⚠️ Senha incorreta. Tente novamente.</span>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-black text-[#4A2B1D] uppercase tracking-widest mb-3 ml-1">E-mail</label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <input 
+                    type="email" 
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-100 bg-gray-50 focus:border-[#8E5A3C] focus:bg-white transition-all outline-none text-lg"
+                    placeholder="seu@email.com"
+                  />
                 </div>
-              )}
+              </div>
+
+              <div>
+                <label className="block text-xs font-black text-[#4A2B1D] uppercase tracking-widest mb-3 ml-1">Senha</label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <input 
+                    type="password" 
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-100 bg-gray-50 focus:border-[#8E5A3C] focus:bg-white transition-all outline-none text-lg"
+                    placeholder="••••••••"
+                  />
+                </div>
+              </div>
             </div>
+
+            {error && (
+              <div className="bg-red-50 text-red-500 text-sm font-bold p-4 rounded-xl border border-red-100 animate-shake">
+                  ⚠️ {error}
+              </div>
+            )}
 
             <button 
               type="submit"
               disabled={loading}
               className="w-full bg-[#4A2B1D] text-white font-black py-5 rounded-2xl hover:bg-[#3A2217] transition-all shadow-xl hover:shadow-2xl active:scale-[0.98] flex items-center justify-center gap-3 text-lg disabled:opacity-50"
             >
-              {loading ? 'Verificando...' : 'Entrar no Sistema'}
+              {loading ? 'Entrando...' : 'Entrar no Sistema'}
               {!loading && <ArrowRight size={20} />}
             </button>
           </form>
         </div>
       </div>
-      
-      <p className="mt-8 text-[#8E5A3C] font-medium text-sm">Einstein Raffle Platform v2.0</p>
     </div>
   );
 }
