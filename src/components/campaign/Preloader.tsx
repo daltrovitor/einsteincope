@@ -3,18 +3,37 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useEffect, useState, memo } from 'react'
 
-function PreloaderComponent() {
+function PreloaderComponent({ waitForEinstein = false }: { waitForEinstein?: boolean }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const timer = window.setTimeout(() => {
-      requestAnimationFrame(() => {
-        setLoading(false)
-      })
-    }, 1200)
+    if (!waitForEinstein) {
+      const timer = window.setTimeout(() => {
+        requestAnimationFrame(() => {
+          setLoading(false)
+        })
+      }, 1200)
+      return () => window.clearTimeout(timer)
+    }
 
-    return () => window.clearTimeout(timer)
-  }, [])
+    if ((window as any).__EINSTEIN_LOADED__) {
+      setLoading(false)
+      return
+    }
+
+    const handleLoaded = () => setLoading(false)
+    window.addEventListener('einstein-loaded', handleLoaded)
+
+    // Fallback timer
+    const timer = window.setTimeout(() => {
+      setLoading(false)
+    }, 5000)
+
+    return () => {
+      window.removeEventListener('einstein-loaded', handleLoaded)
+      window.clearTimeout(timer)
+    }
+  }, [waitForEinstein])
 
   return (
     <AnimatePresence mode="wait">
