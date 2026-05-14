@@ -21,6 +21,8 @@ export default function AdminRifasPage() {
     status: 'OPEN',
     draw_date: ''
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     fetchRaffles();
@@ -64,17 +66,58 @@ export default function AdminRifasPage() {
       });
     }
     setIsModalOpen(true);
+    setImageFile(null);
+  };
+
+  const handleImageUpload = async (file: File) => {
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('raffles')
+        .upload(filePath, file);
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('raffles')
+        .getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (error: any) {
+      alert('Erro ao fazer upload da imagem: ' + error.message);
+      return null;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setUploading(true);
+
+    let currentImageUrl = formData.image_url;
+
+    if (imageFile) {
+      const uploadedUrl = await handleImageUpload(imageFile);
+      if (uploadedUrl) {
+        currentImageUrl = uploadedUrl;
+      }
+    }
+
+    const submissionData = {
+      ...formData,
+      image_url: currentImageUrl
+    };
 
     if (editingRaffle) {
       const { error } = await supabase
         .from('raffles')
         .update({
-          ...formData,
+          ...submissionData,
           updated_at: new Date().toISOString()
         })
         .eq('id', editingRaffle.id);
@@ -83,11 +126,12 @@ export default function AdminRifasPage() {
     } else {
       const { error } = await supabase
         .from('raffles')
-        .insert([formData]);
+        .insert([submissionData]);
       
       if (error) alert('Erro ao criar: ' + error.message);
     }
 
+    setUploading(false);
     setIsModalOpen(false);
     fetchRaffles();
   };
@@ -242,10 +286,69 @@ export default function AdminRifasPage() {
                 </div>
 
                 <div className="space-y-2">
-                   <label className="text-xs font-black text-[#4A2B1D] uppercase ml-1">URL da Imagem</label>
+                   <label className="text-xs font-black text-[#4A2B1D] uppercase ml-1">Imagem do Prêmio</label>
+                   <div className="flex flex-col gap-4">
+                      {formData.image_url && !imageFile && (
+                        <div className="relative w-full h-40 rounded-xl overflow-hidden border-2 border-gray-100">
+                          <img src={formData.image_url} alt="Preview" className="w-full h-full object-cover" />
+                          <button 
+                            type="button"
+                            onClick={() => setFormData({...formData, image_url: ''})}
+                            className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full shadow-lg hover:bg-red-600"
+                          >
+                            <XCircle size={16} />
+                          </button>
+                        </div>
+                      )}
+                      
+                      {imageFile && (
+                        <div className="relative w-full h-40 rounded-xl overflow-hidden border-2 border-[#8E5A3C]">
+                          <img src={URL.createObjectURL(imageFile)} alt="Preview" className="w-full h-full object-cover" />
+                          <button 
+                            type="button"
+                            onClick={() => setImageFile(null)}
+                            className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full shadow-lg hover:bg-red-600"
+                          >
+                            <XCircle size={16} />
+                          </button>
+                        </div>
+                      )}
+
+                      {!imageFile && !formData.image_url && (
+                        <label className="w-full h-40 flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-[#8E5A3C] transition-colors bg-gray-50">
+                          <ImageIcon className="text-gray-400 mb-2" size={32} />
+                          <span className="text-sm font-bold text-gray-500">Clique para selecionar imagem</span>
+                          <input 
+                            type="file" 
+                            className="hidden" 
+                            accept="image/*"
+                            onChange={(e) => e.target.files?.[0] && setImageFile(e.target.files[0])}
+                          />
+                        </label>
+                      )}
+
+                      {(imageFile || formData.image_url) && (
+                         <label className="text-xs font-bold text-[#8E5A3C] cursor-pointer hover:underline flex items-center gap-1">
+                            Trocar imagem
+                            <input 
+                              type="file" 
+                              className="hidden" 
+                              accept="image/*"
+                              onChange={(e) => e.target.files?.[0] && setImageFile(e.target.files[0])}
+                            />
+                         </label>
+                      )}
+                   </div>
+                </div>
+
+                <div className="space-y-2">
+                   <label className="text-xs font-black text-[#4A2B1D] uppercase ml-1">Ou URL da Imagem Externa</label>
                    <input 
                       value={formData.image_url}
-                      onChange={(e) => setFormData({...formData, image_url: e.target.value})}
+                      onChange={(e) => {
+                        setFormData({...formData, image_url: e.target.value});
+                        setImageFile(null);
+                      }}
                       className="w-full px-4 py-3 rounded-xl border-2 border-gray-100 focus:border-[#8E5A3C] outline-none"
                       placeholder="https://... ou /images/..."
                    />
@@ -265,14 +368,14 @@ export default function AdminRifasPage() {
                 </div>
 
                 <div className="pt-4">
-                   <button 
-                     type="submit"
-                     disabled={loading}
-                     className="w-full bg-[#4A2B1D] text-white font-black py-4 rounded-2xl hover:bg-[#3A2217] transition-all shadow-xl flex items-center justify-center gap-2"
-                   >
-                     {loading ? 'Salvando...' : (editingRaffle ? 'Atualizar Rifa' : 'Criar Rifa')}
-                     {!loading && <CheckCircle size={20} />}
-                   </button>
+                    <button 
+                      type="submit"
+                      disabled={loading || uploading}
+                      className="w-full bg-[#4A2B1D] text-white font-black py-4 rounded-2xl hover:bg-[#3A2217] transition-all shadow-xl flex items-center justify-center gap-2 disabled:opacity-50"
+                    >
+                      {uploading ? 'Fazendo upload da imagem...' : (loading ? 'Salvando...' : (editingRaffle ? 'Atualizar Rifa' : 'Criar Rifa'))}
+                      {!loading && !uploading && <CheckCircle size={20} />}
+                    </button>
                 </div>
              </form>
           </div>

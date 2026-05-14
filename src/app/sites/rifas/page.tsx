@@ -1,6 +1,7 @@
 import Navbar from '@/components/campaign/Navbar';
 import { Footer } from '@/components/campaign/FinalSections';
 import Einstein3D from '@/components/campaign/Einstein3D';
+import Preloader from '@/components/campaign/Preloader';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 
@@ -15,6 +16,7 @@ export default async function RifasLandingPage() {
 
   return (
     <main className="bg-[#F8F5EE] min-h-screen pt-24 pb-0 flex flex-col">
+      <Preloader waitForEinstein={true} />
       <Navbar />
       
       {/* Hero Section */}
