@@ -85,7 +85,8 @@ export default function RafflePurchaseForm({ raffleId, price, pixKey }: RafflePu
         <PixQRCode 
           keyPix={pixKey}
           amount={buyerData.totalValue}
-          name={raffleId === 'secador' ? 'Rifa Secador' : 'Rifa Clareamento'}
+          name="RIFA EINSTEIN"
+          city="BRASIL"
         />
 
         <p className="mt-6 text-center text-sm text-gray-500">

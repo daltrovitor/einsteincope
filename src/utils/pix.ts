@@ -17,13 +17,17 @@ export function generatePixPayload(
   city: string = 'SAO PAULO'
 ): string {
   try {
+    // Remove caracteres especiais para evitar erro em bancos (Nubank, etc)
+    const cleanName = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+    const cleanCity = city.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+
     const pix = createStaticPix({
-      merchantName: name.substring(0, 25),
-      merchantCity: city.substring(0, 15),
+      merchantName: cleanName.substring(0, 25),
+      merchantCity: cleanCity.substring(0, 15),
       pixKey: key,
       transactionAmount: amount > 0 ? amount : undefined,
-      infoAdicional: 'Pagamento via Web',
-      txid: '***', // Standard for static PIX
+      infoAdicional: 'Pagamento Einstein',
+      txid: '***', // Padrao mais aceito para PIX estatico
     });
 
     if (hasError(pix)) {
