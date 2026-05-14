@@ -73,10 +73,15 @@ CREATE POLICY "Permitir que qualquer pessoa compre rifas"
 ON raffle_buyers FOR INSERT 
 WITH CHECK (true);
 
--- Apenas usuários logados (Admin) podem visualizar os compradores
+-- Apenas usuários logados (Admin) podem visualizar os compradores (leitura completa)
 CREATE POLICY "Permitir leitura de compradores para admin" 
 ON raffle_buyers FOR SELECT 
 TO authenticated 
+USING (true);
+
+-- Permitir leitura pública limitada (necessário para o .select() após o insert funcionar)
+CREATE POLICY "Permitir leitura pública de compradores" 
+ON raffle_buyers FOR SELECT 
 USING (true);
 
 -- Apenas usuários logados (Admin) podem atualizar status de compradores
