@@ -12,7 +12,12 @@ interface RafflePurchaseFormProps {
 }
 
 export default function RafflePurchaseForm({ raffleId, price, pixKey }: RafflePurchaseFormProps) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    phone: string;
+    pixAccountName: string;
+    quantity: number | string;
+  }>({
     name: '',
     phone: '',
     pixAccountName: '',
@@ -33,7 +38,7 @@ export default function RafflePurchaseForm({ raffleId, price, pixKey }: RafflePu
       const response = await fetch('/api/rifas/buy', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, raffleId }),
+        body: JSON.stringify({ ...formData, quantity: Number(formData.quantity) || 1, raffleId }),
       });
 
       const data = await response.json();
@@ -55,7 +60,7 @@ export default function RafflePurchaseForm({ raffleId, price, pixKey }: RafflePu
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === 'quantity' ? parseInt(value) || 1 : value,
+      [name]: name === 'quantity' ? (value === '' ? '' : parseInt(value) || 0) : value,
     }));
   };
 
@@ -162,7 +167,7 @@ export default function RafflePurchaseForm({ raffleId, price, pixKey }: RafflePu
             <div className="text-gray-500">
               x R$ {price.toFixed(2).replace('.', ',')} = 
               <span className="font-bold text-[#4A2B1D] ml-2 text-xl">
-                R$ {(formData.quantity * price).toFixed(2).replace('.', ',')}
+                R$ {((Number(formData.quantity) || 0) * price).toFixed(2).replace('.', ',')}
               </span>
             </div>
           </div>
