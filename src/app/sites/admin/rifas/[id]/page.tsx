@@ -50,11 +50,6 @@ interface Buyer {
 }
 
 // ──────────────────────────────────────────────
-// Constants for the number grid pagination
-// ──────────────────────────────────────────────
-const NUMBERS_PER_PAGE = 200;
-
-// ──────────────────────────────────────────────
 // Component
 // ──────────────────────────────────────────────
 export default function RaffleProfilePage() {
@@ -81,14 +76,20 @@ export default function RaffleProfilePage() {
   async function fetchData() {
     setLoading(true);
 
-    const [raffleRes, buyersRes] = await Promise.all([
-      supabase.from('raffles').select('*').eq('id', raffleId).single(),
-      supabase
-        .from('raffle_buyers')
-        .select('*')
-        .eq('raffle_id', raffleId)
-        .order('created_at', { ascending: false }),
-    ]);
+    // Try to fetch by slug first, then by id (in case slug is numeric)
+    let raffleRes = await supabase.from('raffles').select('*').eq('slug', raffleId).single();
+    
+    if (raffleRes.error && !isNaN(Number(raffleId))) {
+      raffleRes = await supabase.from('raffles').select('*').eq('id', raffleId).single();
+    }
+
+    const buyersRes = raffleRes.data
+      ? await supabase
+          .from('raffle_buyers')
+          .select('*')
+          .eq('raffle_id', raffleRes.data.id)
+          .order('created_at', { ascending: false })
+      : { data: null };
 
     if (raffleRes.data) setRaffle(raffleRes.data);
     if (buyersRes.data) setBuyers(buyersRes.data);
@@ -141,21 +142,31 @@ export default function RaffleProfilePage() {
   }, [buyers]);
 
   // ── Number grid helpers ─────────────────────
-  const totalNumbers = raffle?.total_numbers ?? 1000;
+  // Only show sold/pending numbers
+  const soldAndPendingNumbers = useMemo(() => {
+    const arr: Array<{ num: string; status: 'approved' | 'pending' }> = [];
+    const approvedList = Array.from(stats.approvedNumbersSet);
+    const pendingList = Array.from(stats.pendingNumbersSet);
+    
+    approvedList.forEach(num => arr.push({ num, status: 'approved' }));
+    pendingList.forEach(num => arr.push({ num, status: 'pending' }));
+    
+    return arr.sort((a, b) => {
+      const numA = parseInt(a.num, 10);
+      const numB = parseInt(b.num, 10);
+      return numA - numB;
+    });
+  }, [stats.approvedNumbersSet, stats.pendingNumbersSet]);
 
-  const totalGridPages = Math.ceil(totalNumbers / NUMBERS_PER_PAGE);
-  const gridStart = gridPage * NUMBERS_PER_PAGE;
-  const gridEnd = Math.min(gridStart + NUMBERS_PER_PAGE, totalNumbers);
+  const SOLD_NUMBERS_PER_PAGE = 100;
+  const totalSoldPages = Math.ceil(soldAndPendingNumbers.length / SOLD_NUMBERS_PER_PAGE);
+  const soldGridStart = gridPage * SOLD_NUMBERS_PER_PAGE;
+  const soldGridEnd = Math.min(soldGridStart + SOLD_NUMBERS_PER_PAGE, soldAndPendingNumbers.length);
 
   // Build the array of numbers for the current page
   const numbersOnPage = useMemo(() => {
-    const arr: string[] = [];
-    const digits = String(totalNumbers - 1).length; // e.g. 1000 => 4 digits (0000..0999)
-    for (let i = gridStart; i < gridEnd; i++) {
-      arr.push(String(i).padStart(digits, '0'));
-    }
-    return arr;
-  }, [gridStart, gridEnd, totalNumbers]);
+    return soldAndPendingNumbers.slice(soldGridStart, soldGridEnd);
+  }, [soldGridStart, soldGridEnd, soldAndPendingNumbers]);
 
   // ── Filtered buyers for the table ───────────
   const filteredBuyers = useMemo(() => {
@@ -196,8 +207,8 @@ export default function RaffleProfilePage() {
   }
 
   // ── Render ──────────────────────────────────
-  const progressPercent = totalNumbers > 0
-    ? Math.round(((stats.soldNumbers + stats.pendingNumbers) / totalNumbers) * 100)
+  const progressPercent = (stats.soldNumbers + stats.pendingNumbers) > 0
+    ? Math.round((stats.soldNumbers / (stats.soldNumbers + stats.pendingNumbers)) * 100)
     : 0;
 
   return (
@@ -347,10 +358,6 @@ export default function RaffleProfilePage() {
           <span className="flex items-center gap-1.5">
             <span className="w-3 h-3 rounded-sm bg-yellow-400" /> Pendentes ({stats.pendingNumbers})
           </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-sm bg-gray-200" /> Disponíveis (
-            {totalNumbers - stats.soldNumbers - stats.pendingNumbers})
-          </span>
         </div>
       </div>
 
@@ -360,11 +367,11 @@ export default function RaffleProfilePage() {
           <div className="flex items-center gap-2">
             <Hash size={18} className="text-[#8E5A3C]" />
             <span className="text-sm font-black text-[#4A2B1D] uppercase tracking-widest">
-              Grade de Números
+              Números Vendidos ({soldAndPendingNumbers.length})
             </span>
           </div>
 
-          {totalGridPages > 1 && (
+          {totalSoldPages > 1 && (
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setGridPage((p) => Math.max(0, p - 1))}
@@ -373,14 +380,14 @@ export default function RaffleProfilePage() {
               >
                 <ChevronLeft size={18} />
               </button>
-              <span className="text-xs font-bold text-[#8E5A3C] min-w-[100px] text-center">
-                {gridStart} – {gridEnd - 1} de {totalNumbers - 1}
+              <span className="text-xs font-bold text-[#8E5A3C] min-w-[120px] text-center">
+                {soldGridStart + 1}–{soldGridEnd} de {soldAndPendingNumbers.length}
               </span>
               <button
                 onClick={() =>
-                  setGridPage((p) => Math.min(totalGridPages - 1, p + 1))
+                  setGridPage((p) => Math.min(totalSoldPages - 1, p + 1))
                 }
-                disabled={gridPage >= totalGridPages - 1}
+                disabled={gridPage >= totalSoldPages - 1}
                 className="p-1.5 rounded-lg hover:bg-[#F8F5EE] disabled:opacity-30 transition-colors"
               >
                 <ChevronRight size={18} />
@@ -389,31 +396,27 @@ export default function RaffleProfilePage() {
           )}
         </div>
 
-        <div className="grid grid-cols-10 sm:grid-cols-15 md:grid-cols-20 gap-1.5">
-          {numbersOnPage.map((num) => {
-            const isApproved = stats.approvedNumbersSet.has(num);
-            const isPending = stats.pendingNumbersSet.has(num);
-            let bg = 'bg-gray-100 text-gray-400';
-            if (isApproved) bg = 'bg-[#4A2B1D] text-white';
-            else if (isPending) bg = 'bg-yellow-400 text-yellow-900';
+        {soldAndPendingNumbers.length === 0 ? (
+          <div className="text-center py-12 text-[#8E5A3C] font-medium">
+            Nenhum número vendido ainda
+          </div>
+        ) : (
+          <div className="grid grid-cols-10 sm:grid-cols-15 md:grid-cols-20 gap-1.5">
+            {numbersOnPage.map(({ num, status }) => {
+              const bg = status === 'approved' ? 'bg-[#4A2B1D] text-white' : 'bg-yellow-400 text-yellow-900';
 
-            return (
-              <div
-                key={num}
-                title={
-                  isApproved
-                    ? `#${num} — Vendido`
-                    : isPending
-                    ? `#${num} — Pendente`
-                    : `#${num} — Disponível`
-                }
-                className={`${bg} text-[10px] font-mono font-bold rounded-md flex items-center justify-center h-7 select-none transition-all hover:scale-110 cursor-default`}
-              >
-                {num}
-              </div>
-            );
-          })}
-        </div>
+              return (
+                <div
+                  key={num}
+                  title={`#${num} — ${status === 'approved' ? 'Vendido' : 'Pendente'}`}
+                  className={`${bg} text-[10px] font-mono font-bold rounded-md flex items-center justify-center h-7 select-none transition-all hover:scale-110 cursor-default`}
+                >
+                  {num}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* ── Buyers Table ─────────────────────── */}

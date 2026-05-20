@@ -190,7 +190,7 @@ export default function AdminRifasPage() {
                    </div>
                    <div className="flex gap-2">
                       <Link
-                        href={`/sites/admin/rifas/${raffle.id}`}
+                        href={`/sites/admin/rifas/${raffle.slug}`}
                         className="p-2 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors"
                         title="Ver Perfil"
                       >
