@@ -293,7 +293,7 @@ export default function RaffleProfilePage() {
           },
           {
             label: 'Números Vendidos',
-            value: `${stats.soldNumbers} / ${totalNumbers}`,
+            value: `${stats.soldNumbers} / ${raffle?.total_numbers ?? 1000}`,
             icon: Hash,
             color: 'bg-blue-50 text-blue-600',
             sub: `${stats.pendingNumbers} pendente(s)`,
