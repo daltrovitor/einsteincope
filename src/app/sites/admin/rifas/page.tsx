@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import { Plus, Edit, Trash2, CheckCircle, XCircle, Image as ImageIcon } from 'lucide-react';
+import { Plus, Edit, Trash2, CheckCircle, XCircle, Image as ImageIcon, Eye } from 'lucide-react';
 
 export default function AdminRifasPage() {
   const [raffles, setRaffles] = useState<any[]>([]);
@@ -188,6 +189,13 @@ export default function AdminRifasPage() {
                      R$ {Number(raffle.price).toFixed(2)}
                    </div>
                    <div className="flex gap-2">
+                      <Link
+                        href={`/sites/admin/rifas/${raffle.id}`}
+                        className="p-2 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors"
+                        title="Ver Perfil"
+                      >
+                        <Eye size={18} />
+                      </Link>
                       <button 
                         onClick={() => handleOpenModal(raffle)}
                         className="p-2 text-[#8E5A3C] hover:bg-[#F8F5EE] rounded-lg transition-colors"
