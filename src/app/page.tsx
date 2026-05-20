@@ -3,6 +3,7 @@ import Navbar from '@/components/campaign/Navbar';
 import HeroSection from '@/components/campaign/HeroSection';
 import AboutSection from '@/components/campaign/AboutSection';
 import ImpactSection from '@/components/campaign/ImpactSection';
+import ProofOfImpactSection from '@/components/campaign/ProofOfImpactSection';
 import { HowToHelpSection, GallerySection, CTASection, Footer } from '@/components/campaign/FinalSections';
 
 export default function LandingPage() {
@@ -14,6 +15,7 @@ export default function LandingPage() {
       <HeroSection />
       <AboutSection />
       <ImpactSection />
+      <ProofOfImpactSection />
       <HowToHelpSection />
       <GallerySection />
       <CTASection />

@@ -54,6 +54,18 @@ const HeroSection = () => {
             EINSTÃO
           </h1>
 
+          {/* Tagline/Propósito Claro */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-8 bg-gradient-to-r from-primary/10 to-accent-yellow/10 border border-primary/20 rounded-2xl p-6 md:p-8"
+          >
+            <p className="text-lg md:text-xl font-semibold text-black leading-relaxed max-w-2xl">
+              A turma Einstein do <strong>COPE 2026</strong> participa de uma <strong>campanha solidária de arrecadação de alimentos</strong> para ajudar famílias em situação de vulnerabilidade. <strong>Toda doação faz diferença.</strong>
+            </p>
+          </motion.div>
+
           <div className="flex flex-col md:flex-row items-center lg:justify-start justify-center gap-4 md:gap-8 mb-12">
             <div className="h-[1px] w-12 bg-black/10 hidden lg:block" />
             <p className="font-display italic text-2xl md:text-3xl text-primary text-balance">
@@ -65,14 +77,25 @@ const HeroSection = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col sm:flex-row items-center lg:justify-start justify-center gap-6"
+            className="flex flex-col sm:flex-row items-center lg:justify-start justify-center gap-4 md:gap-6 flex-wrap"
           >
             <Link href="/donate">
-              <button className="group relative px-12 py-5 cursor-pointer bg-black text-white rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-2xl">
-                <span className="relative z-10 font-bold uppercase tracking-widest text-xs">Contribuir</span>
+              <button className="group relative px-10 md:px-12 py-5 cursor-pointer bg-black text-white rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-2xl">
+                <span className="relative z-10 font-bold uppercase tracking-widest text-xs">Quero doar alimentos</span>
                 <div className="absolute inset-0 bg-primary translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
               </button>
             </Link>
+
+            <Link href="/pix">
+              <button className="group relative px-10 md:px-12 py-5 cursor-pointer bg-accent-yellow text-black rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-2xl">
+                <span className="relative z-10 font-bold uppercase tracking-widest text-xs">Contribuição Pix</span>
+                <div className="absolute inset-0 bg-primary translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
+              </button>
+            </Link>
+
+            <button className="px-10 md:px-12 py-5 border-2 border-black text-black rounded-full font-bold uppercase tracking-widest text-xs hover:bg-black hover:text-white transition-all duration-300 cursor-pointer">
+              Saiba como ajudar
+            </button>
           </motion.div>
         </motion.div>
 
