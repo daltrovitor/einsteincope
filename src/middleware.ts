@@ -24,11 +24,6 @@ export default async function middleware(req: NextRequest) {
   // Extract subdomain
   const subdomain = hostname.replace(`.${rootDomain}`, '')
 
-  // Prevent direct access to /sites
-  if (url.pathname.startsWith('/sites')) {
-    return new NextResponse(null, { status: 404 })
-  }
-
   // Handle subdomains
   if (subdomain === 'rifas' || hostname.startsWith('rifas.')) {
     return NextResponse.rewrite(new URL(`/sites/rifas${url.pathname}`, req.url))
@@ -38,6 +33,10 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.rewrite(new URL(`/sites/admin${url.pathname}`, req.url))
   }
 
+  // Prevent direct access to /sites (only for root domain)
+  if (url.pathname.startsWith('/sites')) {
+    return new NextResponse(null, { status: 404 })
+  }
 
   // Default path for root domain
   return NextResponse.next()
