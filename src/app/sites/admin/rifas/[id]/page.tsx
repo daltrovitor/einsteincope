@@ -197,7 +197,7 @@ export default function RaffleProfilePage() {
       <div className="min-h-[60vh] flex flex-col items-center justify-center gap-6">
         <p className="text-[#8E5A3C] font-bold text-xl">Rifa não encontrada.</p>
         <Link
-          href="/sites/admin/rifas"
+          href="/rifas"
           className="flex items-center gap-2 text-[#4A2B1D] font-bold hover:underline"
         >
           <ArrowLeft size={18} /> Voltar para listagem
@@ -216,7 +216,7 @@ export default function RaffleProfilePage() {
       {/* ── Back link + Header ───────────────── */}
       <div>
         <Link
-          href="/sites/admin/rifas"
+          href="/rifas"
           className="inline-flex items-center gap-2 text-[#8E5A3C] font-bold text-sm hover:text-[#4A2B1D] transition-colors mb-4"
         >
           <ArrowLeft size={16} /> Voltar para Rifas
