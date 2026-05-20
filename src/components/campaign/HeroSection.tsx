@@ -77,25 +77,14 @@ const HeroSection = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col sm:flex-row items-center lg:justify-start justify-center gap-4 md:gap-6 flex-wrap"
+            className="flex flex-col sm:flex-row items-center lg:justify-start justify-center gap-6"
           >
             <Link href="/donate">
-              <button className="group relative px-10 md:px-12 py-5 cursor-pointer bg-black text-white rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-2xl">
+              <button className="group relative px-12 py-5 cursor-pointer bg-black text-white rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-2xl">
                 <span className="relative z-10 font-bold uppercase tracking-widest text-xs">Quero doar alimentos</span>
                 <div className="absolute inset-0 bg-primary translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
               </button>
             </Link>
-
-            <Link href="/pix">
-              <button className="group relative px-10 md:px-12 py-5 cursor-pointer bg-accent-yellow text-black rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-2xl">
-                <span className="relative z-10 font-bold uppercase tracking-widest text-xs">Contribuição Pix</span>
-                <div className="absolute inset-0 bg-primary translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-              </button>
-            </Link>
-
-            <button className="px-10 md:px-12 py-5 border-2 border-black text-black rounded-full font-bold uppercase tracking-widest text-xs hover:bg-black hover:text-white transition-all duration-300 cursor-pointer">
-              Saiba como ajudar
-            </button>
           </motion.div>
         </motion.div>
 
