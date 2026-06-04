@@ -23,7 +23,7 @@ export default async function RifaPage({ params }: RafflePageProps) {
     notFound();
   }
 
-  const PIX_KEY = process.env.NEXT_PUBLIC_PIX_KEY || '7c653110-0380-458c-ba23-fd3e291e6104';
+  const PIX_KEY = process.env.NEXT_PUBLIC_PIX_KEY || '62999216741';
 
   // Parse description for bullets if needed, or just display as text
   const features = raffle.description?.split('\n').filter((f: string) => f.trim().length > 0) || [];

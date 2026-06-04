@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 export default function PixPage() {
   const [amount, setAmount] = useState<number>(29.90);
-  const PIX_KEY = "7c653110-0380-458c-ba23-fd3e291e6104";
+  const PIX_KEY = "62999216741";
 
   return (
     <main className="min-h-screen bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-100 p-4 md:p-8">

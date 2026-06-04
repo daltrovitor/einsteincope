@@ -7,7 +7,7 @@ import { Copy, Check, X } from 'lucide-react';
 import QRCodeDisplay from './QRCodeDisplay';
 import { InfiniteGrid } from '../ui/the-infinite-grid';
 
-const PIX_KEY = '7c653110-0380-458c-ba23-fd3e291e6104';
+const PIX_KEY = '62999216741';
 const DONATION_AMOUNTS = [5, 10, 20, 50, 100];
 
 export default function DonationPage({ onClose }: { onClose?: () => void }) {
